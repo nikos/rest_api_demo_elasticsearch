@@ -1,7 +1,7 @@
 .PHONY: clean build run stop inspect
 
-IMAGE_NAME = nikos/flask-restplus-demo
-CONTAINER_NAME = flask-restplus-demo
+IMAGE_NAME = nikos/flask-restplus-es-demo
+CONTAINER_NAME = flask-restplus-es-demo
 
 build:
 	docker build -t $(IMAGE_NAME) .

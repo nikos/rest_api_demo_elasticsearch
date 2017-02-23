@@ -3,37 +3,26 @@
 # http://flask-sqlalchemy.pocoo.org/2.1/quickstart/#simple-relationships
 
 from datetime import datetime
+from elasticsearch_dsl import DocType, Date, String, Keyword, Text
+from slugify import slugify
 
-from rest_api_demo.database import db
 
+class Post(DocType):
+    slug = String()
+    title = Text(analyzer='snowball', fields={'raw': Keyword()})
+    body = Text(analyzer='snowball')
+    pub_date = Date()
+    created_date = Date()
 
-class Post(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(80))
-    body = db.Column(db.Text)
-    pub_date = db.Column(db.DateTime)
+    categories = Keyword()
 
-    category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
-    category = db.relationship('Category', backref=db.backref('posts', lazy='dynamic'))
+    class Meta:
+        index = 'blog'
 
-    def __init__(self, title, body, category, pub_date=None):
-        self.title = title
-        self.body = body
-        if pub_date is None:
-            pub_date = datetime.utcnow()
-        self.pub_date = pub_date
-        self.category = category
+    def save(self, ** kwargs):
+        self.slug = slugify(self.title)
+        self.created_date = datetime.now()
+        return super(Post, self).save(** kwargs)
 
     def __repr__(self):
         return '<Post %r>' % self.title
-
-
-class Category(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50))
-
-    def __init__(self, name):
-        self.name = name
-
-    def __repr__(self):
-        return '<Category %r>' % self.name

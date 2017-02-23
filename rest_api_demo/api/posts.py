@@ -27,10 +27,20 @@ class PostsCollection(Resource):
         page = args.get('page', 1)
         per_page = args.get('per_page', 10)
 
-        posts_query = Post.query
-        posts_page = posts_query.paginate(page, per_page, error_out=False)
+        print(page, per_page)
+        s = Post.search()
+        s = s[(page-1)*per_page:page*per_page]   # pagination {"from": 10, "size": 10}
+        response = s.execute()
 
-        return posts_page
+        # for post in response:
+        #     print(post.meta.score, post.title)
+
+        return {
+            'items': response,
+            'page': page,
+            'per_page': per_page,
+            'total': response.hits.total
+        }
 
     @api.expect(blog_post)
     def post(self):

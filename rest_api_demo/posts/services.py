@@ -1,53 +1,37 @@
-from rest_api_demo.database import db
-from rest_api_demo.posts.models import Post, Category
+from rest_api_demo.posts.models import Post
 
 
 def create_blog_post(data):
     title = data.get('title')
     body = data.get('body')
-    category_id = data.get('category_id')
-    category = Category.query.filter(Category.id == category_id).one()
-    post = Post(title, body, category)
-    db.session.add(post)
-    db.session.commit()
+    categories = data.get('categories')
+    post = Post(title=title, body=body, categories=categories)
+    post.save()
+    print("saved post: {}".format(post))
 
 
-def update_post(post_id, data):
-    post = Post.query.filter(Post.id == post_id).one()
+def update_post(id, data):
+    post = Post.get(id=id)
     post.title = data.get('title')
     post.body = data.get('body')
-    category_id = data.get('category_id')
-    post.category = Category.query.filter(Category.id == category_id).one()
-    db.session.add(post)
-    db.session.commit()
+    post.categories = data.get('categories')
+    post.save()
 
 
 def delete_post(post_id):
-    post = Post.query.filter(Post.id == post_id).one()
-    db.session.delete(post)
-    db.session.commit()
+    post = Post.get(post_id)
+    post.delete()
 
 
-def create_category(data):
-    name = data.get('name')
-    category_id = data.get('id')
-
-    category = Category(name)
-    if category_id:
-        category.id = category_id
-
-    db.session.add(category)
-    db.session.commit()
+def get_categories():
+    # TODO: search for all distinct categories used by all posts
+    pass
 
 
-def update_category(category_id, data):
-    category = Category.query.filter(Category.id == category_id).one()
-    category.name = data.get('name')
-    db.session.add(category)
-    db.session.commit()
-
-
-def delete_category(category_id):
-    category = Category.query.filter(Category.id == category_id).one()
-    db.session.delete(category)
-    db.session.commit()
+def search_blogs_by_category(name):
+    s = Post.search()
+    s.query('match', categories=name)
+    results = s.execute()
+    for post in results:
+        print(post.meta.score, post.title)
+    return results

@@ -7,7 +7,7 @@ ARG VCS_REF
 # Set labels (see https://microbadger.com/labels)
 LABEL org.label-schema.build-date=$BUILD_DATE \
       org.label-schema.vcs-ref=$VCS_REF \
-      org.label-schema.vcs-url="https://github.com/nikos/rest_api_demo"
+      org.label-schema.vcs-url="https://github.com/nikos/rest_api_demo_elasticsearch"
 
 
 RUN mkdir -p /usr/src/app

@@ -2,12 +2,13 @@ from flask_restplus import fields
 from rest_api_demo.api import api
 
 blog_post = api.model('Blog post', {
-    'id': fields.Integer(readOnly=True, description='The unique identifier of a blog post'),
+    # 'id': fields.Integer(readOnly=True, description='The unique identifier of a blog post'),
+    'slug': fields.String(readOnly=True, description='slug of the article title'),
     'title': fields.String(required=True, description='Article title'),
     'body': fields.String(required=True, description='Article content'),
     'pub_date': fields.DateTime,
-    'category_id': fields.Integer(attribute='category.id'),
-    'category': fields.String(attribute='category.id'),
+    'created_date': fields.DateTime(readOnly=True),
+    'categories': fields.List(fields.String),
 })
 
 pagination = api.model('A page of results', {
@@ -22,7 +23,7 @@ page_of_blog_posts = api.inherit('Page of blog posts', pagination, {
 })
 
 category = api.model('Blog category', {
-    'id': fields.Integer(readOnly=True, description='The unique identifier of a blog category'),
+    # 'id': fields.Integer(readOnly=True, description='The unique identifier of a blog category'),
     'name': fields.String(required=True, description='Category name'),
 })
 
