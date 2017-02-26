@@ -11,3 +11,24 @@ It makes use of:
 * Swagger UI (via `restplus`)
 * Simple model (thanks to `elasticsearch-dsl`)
 * Alpine Linux (if running as a docker container)
+
+
+## Getting Started
+
+Either build and run with the help of the provided Dockerfile
+```
+make build
+make run
+```
+and open up your browser on http://localhost:8000/api/ to see the
+Swagger UI and interact with the REST endpoints.
+
+Or run it locally by executing:
+```
+export PYTHONPATH=.:rest_api_demo
+python3 rest_api_demo/app.py
+```
+
+See corresponding elasticsearch documents by opening Kibana:
+
+    open http://localhost:5601/

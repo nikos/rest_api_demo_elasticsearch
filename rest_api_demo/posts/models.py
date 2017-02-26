@@ -8,7 +8,7 @@ from slugify import slugify
 
 
 class Post(DocType):
-    slug = String()
+    slug = String()  # deprecated: use Text or Keyword
     title = Text(analyzer='snowball', fields={'raw': Keyword()})
     body = Text(analyzer='snowball')
     pub_date = Date()

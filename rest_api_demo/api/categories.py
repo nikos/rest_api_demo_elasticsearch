@@ -4,7 +4,7 @@ from flask_restplus import Resource
 
 from rest_api_demo.api import api
 from rest_api_demo.api.serializers import category, category_with_posts
-from rest_api_demo.posts.services import get_categories, search_blogs_by_category
+from rest_api_demo.posts import services
 
 log = logging.getLogger(__name__)
 
@@ -19,7 +19,7 @@ class CategoryCollection(Resource):
         """
         Returns list of blog categories.
         """
-        return get_categories()
+        return services.get_categories()
 
 
 @ns.route('/<string:name>')
@@ -31,4 +31,4 @@ class CategoryItem(Resource):
         """
         Returns a category with a list of posts.
         """
-        return search_blogs_by_category(name)
+        return services.search_blogs_by_category(name)
