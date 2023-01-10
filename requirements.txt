@@ -1,4 +1,4 @@
-flask==0.12
+flask==1.0
 flask-restplus==0.10.0
 Flask-Elasticsearch==0.2.5
 elasticsearch-dsl==5.1.0
